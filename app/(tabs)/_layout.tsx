@@ -9,7 +9,7 @@ const icon = (e: string) => () => <Text style={{ fontSize: 18 }}>{e}</Text>;
 export default function TabsLayout() {
   const { user, ready, logout, cart, compras } = useApp();
   if (!ready) return null;
-  if (!user) return <Redirect href="/" />;
+  if (!user) return <Redirect href="/login" />;
 
   const unidades = cart.reduce((n, i) => n + i.cantidad, 0);
   const pendientes = compras.filter((c) => c.estado === 'pendiente').length;
