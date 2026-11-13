@@ -1,0 +1,14 @@
+{
+  "name": "tienda-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Utilidades para trabajar con los 3 microservicios (auth, productos, compras)",
+  "scripts": {
+    "install:all": "npm --prefix auth install && npm --prefix productos install && npm --prefix compras install",
+    "setup:env": "node scripts/setup-env.js",
+    "dev:all": "node scripts/dev-all.js",
+    "start:all": "node scripts/dev-all.js start",
+    "seed": "npm --prefix productos run seed",
+    "sync:shared": "node scripts/sync-shared.js"
+  }
+}
