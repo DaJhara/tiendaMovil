@@ -25,11 +25,29 @@ function StockRow({ p, onEdit }: { p: Product; onEdit: (p: Product) => void }) {
     }
   };
 
-  const borrar = () =>
-    Alert.alert('Eliminar producto', `¿Eliminar "${p.nombre}"? Las compras anteriores conservan su detalle.`, [
+  const borrar = () => {
+    const mensaje = `¿Eliminar "${p.nombre}"? Las compras anteriores conservan su detalle.`;
+
+    if (Platform.OS === 'web') {
+      const confirmar = window.confirm(mensaje);
+
+      if (confirmar) {
+        removeProduct(p.id).catch((e) => Alert.alert('Inventario', msg(e)));
+      }
+
+      return;
+    }
+
+    Alert.alert('Eliminar producto', mensaje, [
       { text: 'Cancelar', style: 'cancel' },
-      { text: 'Eliminar', style: 'destructive', onPress: () => removeProduct(p.id).catch((e) => Alert.alert('Inventario', msg(e))) },
+      {
+        text: 'Eliminar',
+        style: 'destructive',
+        onPress: () =>
+          removeProduct(p.id).catch((e) => Alert.alert('Inventario', msg(e))),
+      },
     ]);
+  };
 
   return (
     <View style={[s.card, { gap: 10 }]}>
