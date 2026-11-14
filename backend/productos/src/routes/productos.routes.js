@@ -1,6 +1,6 @@
 const express = require('express');
 const db = require('../db');
-const { requireAuth } = require('../middleware/auth');
+const { requireAuth, requireAdmin } = require('../middleware/auth');
 const { HttpError, asyncHandler } = require('../middleware/errors');
 
 const router = express.Router();
@@ -57,6 +57,7 @@ router.get(
 router.post(
   '/',
   requireAuth,
+  requireAdmin,
   asyncHandler(async (req, res) => {
     const p = validar(req.body);
     const r = await db.query(
@@ -70,6 +71,7 @@ router.post(
 router.put(
   '/:id',
   requireAuth,
+  requireAdmin,
   asyncHandler(async (req, res) => {
     const id = parseId(req.params.id);
     const p = validar(req.body);
@@ -86,6 +88,7 @@ router.put(
 router.patch(
   '/:id/stock',
   requireAuth,
+  requireAdmin,
   asyncHandler(async (req, res) => {
     const id = parseId(req.params.id);
     const { stock, delta } = req.body || {};
@@ -114,6 +117,7 @@ router.patch(
 router.delete(
   '/:id',
   requireAuth,
+  requireAdmin,
   asyncHandler(async (req, res) => {
     const r = await db.query('DELETE FROM productos WHERE id=$1', [parseId(req.params.id)]);
     if (!r.rowCount) throw new HttpError(404, 'Producto no encontrado');

@@ -8,7 +8,12 @@ import { getDB } from '../database/local';
 import { HttpError, NetworkError, TOKEN_KEY, isRetryable, request, setUnauthorizedHandler } from '../services/api';
 
 // ───────────────────────────── Tipos ─────────────────────────────
-export type User = { id: number; nombre: string; email: string };
+export type User = {
+  id: number;
+  nombre: string;
+  email: string;
+  rol: 'admin' | 'usuario';
+};
 export type Product = { id: number; nombre: string; descripcion: string; precio: number; imagen: string; stock: number };
 export type ProductInput = { nombre: string; descripcion: string; precio: number; stock: number; imagen: string };
 export type CartItem = { producto_id: number; nombre: string; precio: number; cantidad: number; imagen: string | null; stock: number | null };

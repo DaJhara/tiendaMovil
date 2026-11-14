@@ -14,6 +14,9 @@ router.post(
     const nombre = String(req.body?.nombre ?? '').trim();
     const email = String(req.body?.email ?? '').trim().toLowerCase();
     const password = String(req.body?.password ?? '');
+    if (email === 'demo@tienda.com') {
+      throw new HttpError(403, 'Este correo está reservado');
+    }
     if (!nombre || nombre.length > 120 || !EMAIL_RE.test(email) || email.length > 180 || password.length < 6) {
       throw new HttpError(400, 'Nombre, correo válido y contraseña (mínimo 6 caracteres) son obligatorios');
     }
@@ -33,10 +36,19 @@ router.post(
   asyncHandler(async (req, res) => {
     const email = String(req.body?.email ?? '').trim().toLowerCase();
     const password = String(req.body?.password ?? '');
-    const q = await db.query('SELECT id,nombre,email,password_hash FROM usuarios WHERE email=$1', [email]);
+    const q = await db.query(
+      'SELECT id,nombre,email,password_hash,rol FROM usuarios WHERE email=$1',
+      [email]
+    );
+
     const u = q.rows[0];
     if (!u || !(await bcrypt.compare(password, u.password_hash))) throw new HttpError(401, 'Credenciales incorrectas');
-    const user = { id: u.id, nombre: u.nombre, email: u.email };
+    const user = {
+      id: u.id,
+      nombre: u.nombre,
+      email: u.email,
+      rol: u.rol
+    };
     const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || '7d' });
     res.json({ token, user });
   })

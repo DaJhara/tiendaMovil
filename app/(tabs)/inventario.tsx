@@ -55,7 +55,7 @@ function StockRow({ p, onEdit }: { p: Product; onEdit: (p: Product) => void }) {
 }
 
 export default function Inventario() {
-  const { products, saveProduct, online } = useApp();
+  const { products, saveProduct, online, user } = useApp();
   const [editId, setEditId] = useState<number | undefined>();
   const [nombre, setNombre] = useState('');
   const [descripcion, setDescripcion] = useState('');
@@ -89,6 +89,19 @@ export default function Inventario() {
       setBusy(false);
     }
   };
+
+    if (user?.rol !== 'admin') {
+      return (
+        <View style={s.screen}>
+          <View style={[s.card, { margin: 12 }]}>
+            <Text style={s.title}>Acceso restringido</Text>
+            <Text style={s.muted}>
+              Solo los administradores pueden gestionar productos e inventario.
+            </Text>
+          </View>
+        </View>
+      );
+    }
 
   return (
     <KeyboardAvoidingView style={s.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>

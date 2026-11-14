@@ -54,7 +54,7 @@ export default function Historial() {
         refreshing={refreshing}
         onRefresh={refrescar}
         contentContainerStyle={{ padding: 12, gap: 10 }}
-        ListHeaderComponent={pendientes > 0 ? <Btn title="Sincronizar ahora" variant="ghost" onPress={refrescar} /> : null}
+        ListHeaderComponent={pendientes > 0 ? <Btn title="Sincronizar ahora" variant="ghost" onPress={refrescar} /> : undefined}
         ListEmptyComponent={<Text style={s.empty}>Aún no tienes compras.</Text>}
         renderItem={({ item }) => {
           const e = ESTADO[item.estado];

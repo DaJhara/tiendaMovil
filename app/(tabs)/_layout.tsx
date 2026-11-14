@@ -29,7 +29,14 @@ export default function TabsLayout() {
       <Tabs.Screen name="index" options={{ title: 'Productos', tabBarIcon: icon('🛍️') }} />
       <Tabs.Screen name="carrito" options={{ title: 'Carrito', tabBarIcon: icon('🛒'), tabBarBadge: unidades || undefined }} />
       <Tabs.Screen name="historial" options={{ title: 'Compras', tabBarIcon: icon('🧾'), tabBarBadge: pendientes || undefined }} />
-      <Tabs.Screen name="inventario" options={{ title: 'Inventario', tabBarIcon: icon('📦') }} />
+      <Tabs.Screen
+        name="inventario"
+        options={{
+          title: 'Inventario',
+          tabBarIcon: icon('📦'),
+          href: user.rol === 'admin' ? undefined : null,
+        }}
+      />
     </Tabs>
   );
 }

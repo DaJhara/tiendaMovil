@@ -1,9 +1,10 @@
-// Crea las tablas si no existen (idempotente). Usa un advisory lock para que
+﻿// Crea las tablas si no existen (idempotente). Usa un advisory lock para que
 // los 3 servicios puedan arrancar al mismo tiempo sin pisarse.
 const db = require('./db');
 
 const SQL = `
-CREATE TABLE IF NOT EXISTS usuarios(id SERIAL PRIMARY KEY,nombre VARCHAR(120) NOT NULL,email VARCHAR(180) UNIQUE NOT NULL,password_hash TEXT NOT NULL,created_at TIMESTAMPTZ DEFAULT NOW());
+CREATE TABLE IF NOT EXISTS usuarios(id SERIAL PRIMARY KEY,nombre VARCHAR(120) NOT NULL,email VARCHAR(180) UNIQUE NOT NULL,password_hash TEXT NOT NULL,rol VARCHAR(20) NOT NULL DEFAULT 'usuario',created_at TIMESTAMPTZ DEFAULT NOW());
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS rol VARCHAR(20) NOT NULL DEFAULT 'usuario';
 CREATE TABLE IF NOT EXISTS productos(id SERIAL PRIMARY KEY,nombre VARCHAR(150) NOT NULL,descripcion TEXT NOT NULL,precio NUMERIC(12,2) NOT NULL CHECK(precio>=0),imagen TEXT DEFAULT '',stock INTEGER NOT NULL DEFAULT 0 CHECK(stock>=0));
 ALTER TABLE productos ADD COLUMN IF NOT EXISTS stock INTEGER NOT NULL DEFAULT 0 CHECK(stock>=0);
 CREATE TABLE IF NOT EXISTS compras(id BIGSERIAL PRIMARY KEY,usuario_id INTEGER REFERENCES usuarios(id),cliente VARCHAR(120) NOT NULL,total NUMERIC(12,2) NOT NULL,client_id UUID UNIQUE NOT NULL,created_at TIMESTAMPTZ DEFAULT NOW());
@@ -24,3 +25,4 @@ async function ensureSchema() {
 }
 
 module.exports = { ensureSchema };
+
